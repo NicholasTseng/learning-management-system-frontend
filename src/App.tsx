@@ -1,5 +1,12 @@
+import { HomePage } from './pages';
+import { ConfigProvider } from 'antd';
+
 function App() {
-  return <div>Home Page</div>;
+  return (
+    <ConfigProvider>
+      <HomePage />
+    </ConfigProvider>
+  );
 }
 
 export default App;

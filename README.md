@@ -6,37 +6,21 @@ An **Online Learning Management System** designed to facilitate a virtual learni
 
 ## 🚀 Features
 
-- **User Authentication and Authorization**
-  - Secure registration and login
-  - Role-based access control (Student, Instructor, Admin)
+1. **User Login and Roles**
+   - Secure access for user registration and login.
+   - Role assignment as Students or Instructors.
 
-- **Course Management**
-  - Instructors can create, update, and delete courses
-  - Upload course materials (videos, PDFs, etc.)
-  - Manage course enrollments
+2. **Courses**
+   - Instructors can create and manage courses, including uploading materials.
+   - Students can browse, enroll in courses, and access learning content.
 
-- **Enrollment System**
-  - Students can browse and enroll in available courses
-  - Enrollment management for instructors and admins
+3. **Assessments**
+   - Instructors can create quizzes and assignments to evaluate students.
+   - Automatic grading provides immediate feedback for quizzes.
 
-- **Content Delivery**
-  - Stream video lectures
-  - Access downloadable resources
-  - Interactive forums and discussions
-
-- **Assessments and Quizzes**
-  - Create quizzes and assignments
-  - Automatic grading for quizzes
-  - Manual grading for assignments
-
-- **Progress Tracking**
-  - Students can track their course progress
-  - Instructors can monitor student performance
-  - Analytics and reporting features
-
-- **Notifications**
-  - Email and in-app notifications for updates and deadlines
-  - Announcements from instructors
+4. **Progress Tracking**
+   - Students can monitor their learning progress.
+   - Instructors can view analytics on student performance.
 
 ---
 
