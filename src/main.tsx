@@ -1,9 +1,9 @@
-// main.tsx
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import './styles/global.css';
+import { ConfigProvider } from 'antd';
 
 const container = document.getElementById('root');
 
@@ -16,7 +16,9 @@ const root = createRoot(container);
 root.render(
   <React.StrictMode>
     <BrowserRouter>
-      <App />
+      <ConfigProvider>
+        <App />
+      </ConfigProvider>
     </BrowserRouter>
   </React.StrictMode>,
 );
