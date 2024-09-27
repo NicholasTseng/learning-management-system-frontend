@@ -1,6 +1,12 @@
 import { useCallback } from 'react';
 import { Modal, Form, Input, Button, Tabs } from 'antd';
+import api from '../../services/api';
+import { useNavigate } from 'react-router-dom';
 
+type userLoginInfo = {
+  username: string;
+  password: string;
+};
 interface LoginModalProps {
   opened: boolean;
   closeLoginModal: () => void;
@@ -8,11 +14,27 @@ interface LoginModalProps {
 
 export function LoginModal({ opened, closeLoginModal }: LoginModalProps) {
   const [form] = Form.useForm();
+  const navigate = useNavigate();
 
-  const handleLogin = useCallback((values: unknown) => {
-    console.log('Login values:', values);
-    // Add login logic here
-  }, []);
+  const handleLogin = useCallback(
+    async (info: userLoginInfo) => {
+      try {
+        const { username, password } = info;
+        const encodedPassword = btoa(password);
+        const loginResponse = await api.post('/auth/login', {
+          username,
+          password: encodedPassword,
+        });
+
+        const { token } = loginResponse.data as unknown as { token: string };
+        localStorage.setItem('token', token);
+        navigate('/dashboard');
+      } catch (error) {
+        console.error('Error logging in:', error as Error);
+      }
+    },
+    [navigate],
+  );
 
   const handleSignUp = useCallback((values: unknown) => {
     console.log('SignUp values:', values);
