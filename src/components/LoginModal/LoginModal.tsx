@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 import LoginForm from './LoginForm';
 import SignUpForm from './SignUpForm';
 import { userLoginInfo, userSignUpInfo } from './LoginModal.type';
+import Cookies from 'js-cookie';
 
 interface LoginModalProps {
   opened: boolean;
@@ -25,7 +26,7 @@ export function LoginModal({ opened, closeLoginModal }: LoginModalProps) {
         });
 
         const { token } = loginResponse.data as unknown as { token: string };
-        localStorage.setItem('token', token);
+        Cookies.set('user_token', token);
         navigate('/dashboard');
       } catch (error) {
         console.error('Error logging in:', error as Error);
@@ -47,7 +48,7 @@ export function LoginModal({ opened, closeLoginModal }: LoginModalProps) {
         });
 
         const { token } = signUpResponse.data as unknown as { token: string };
-        localStorage.setItem('token', token);
+        Cookies.set('user_token', token);
         navigate('/dashboard');
       } catch (error) {
         console.error('Error logging in:', error as Error);
