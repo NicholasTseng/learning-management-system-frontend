@@ -2,9 +2,11 @@ import { Link } from 'react-router-dom';
 import styles from './Navbar.module.css';
 import { Button } from 'antd';
 import { LoginModal, useLoginModal } from '../LoginModal';
+import Cookies from 'js-cookie';
 
 export function Navbar() {
-  const { openLoginModal, closeLoginModal, opened } = useLoginModal();
+  const { openLoginModal, closeLoginModal, opened, logout } = useLoginModal();
+  const token = Cookies.get('user_token');
 
   return (
     <>
@@ -14,18 +16,19 @@ export function Navbar() {
           <Link to="/">LMS</Link>
         </div>
         <ul className={styles.navLinks}>
+          {token && (
+            <>
+              <li>
+                <Link to="/user">User Profile</Link>
+              </li>
+              <li>
+                <Link to="/dashboard">Dashboard</Link>
+              </li>
+            </>
+          )}
           <li>
-            <Link to="/courses">Courses</Link>
-          </li>
-          <li>
-            <Link to="/about">About</Link>
-          </li>
-          <li>
-            <Link to="/contact">Contact</Link>
-          </li>
-          <li>
-            <Button type="primary" onClick={openLoginModal}>
-              Login
+            <Button type="primary" onClick={token ? logout : openLoginModal}>
+              {token ? 'Logout' : 'Login'}
             </Button>
           </li>
         </ul>

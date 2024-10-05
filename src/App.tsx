@@ -1,4 +1,4 @@
-import { HomePage, DashboardPage } from './pages';
+import { HomePage, DashboardPage, UserProfilePage } from './pages';
 import { ProtectedRoute } from './components';
 import { Route, Routes } from 'react-router-dom';
 
@@ -11,6 +11,14 @@ function App() {
         element={
           <ProtectedRoute>
             <DashboardPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/user"
+        element={
+          <ProtectedRoute>
+            <UserProfilePage />
           </ProtectedRoute>
         }
       />
