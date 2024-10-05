@@ -18,10 +18,10 @@ export function LoginModal({ opened, closeLoginModal }: LoginModalProps) {
   const handleLogin = useCallback(
     async (info: userLoginInfo) => {
       try {
-        const { username, password } = info;
+        const { email, password } = info;
         const encodedPassword = btoa(password);
         const loginResponse = await api.post('/auth/login', {
-          username,
+          email,
           password: encodedPassword,
         });
 
@@ -63,7 +63,7 @@ export function LoginModal({ opened, closeLoginModal }: LoginModalProps) {
         <Tabs.TabPane tab="Login" key="1">
           <LoginForm handleLogin={handleLogin} />
         </Tabs.TabPane>
-        <Tabs.TabPane tab="SignUp" key="2">
+        <Tabs.TabPane tab="Sign Up" key="2">
           <SignUpForm handleSignUp={handleSignUp} />
         </Tabs.TabPane>
       </Tabs>
