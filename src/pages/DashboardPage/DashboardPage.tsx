@@ -5,7 +5,7 @@ import { useCourseStore } from '../../store';
 import { Button } from 'antd';
 
 export function DashboardPage() {
-  const { courses, setCourses } = useCourseStore();
+  const { courses, setCourses, removeCourse } = useCourseStore();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const onAddCourse = useCallback(
     (course: { title: string; description: string }) => {
@@ -18,6 +18,13 @@ export function DashboardPage() {
       ]);
     },
     [courses, setCourses],
+  );
+  const onEditCourse = useCallback((id: number) => {
+    window.location.href = `/course/${id}`;
+  }, []);
+  const onRemoveCourse = useCallback(
+    (id: number) => removeCourse(id),
+    [removeCourse],
   );
 
   return (
@@ -33,7 +40,8 @@ export function DashboardPage() {
           <CourseEntry
             key={course.id}
             course={course}
-            editCourse={(id) => console.log(`Entering course with id ${id}`)}
+            editCourse={onEditCourse}
+            removeCourse={onRemoveCourse}
           />
         ))}
         <Button

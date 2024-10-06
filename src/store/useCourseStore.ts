@@ -10,6 +10,8 @@ interface CourseStore {
   courses: Course[];
   setCourses: (newCourses: Course[]) => void;
   fetchCourses: () => Promise<void>;
+  updateCourse: (course: Course) => void;
+  removeCourse: (id: number) => void;
 }
 
 export const useCourseStore = create<CourseStore>((set) => ({
@@ -39,5 +41,18 @@ export const useCourseStore = create<CourseStore>((set) => ({
     } catch (error) {
       console.error('Failed to fetch courses:', error);
     }
+  },
+
+  updateCourse: (newCourse) =>
+    set((state) => ({
+      courses: state.courses.map((course) =>
+        course.id === newCourse.id ? newCourse : course,
+      ),
+    })),
+
+  removeCourse: (id) => {
+    set((state) => ({
+      courses: state.courses.filter((course) => course.id !== id),
+    }));
   },
 }));

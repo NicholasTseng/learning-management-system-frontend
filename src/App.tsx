@@ -1,4 +1,4 @@
-import { HomePage, DashboardPage, UserProfilePage } from './pages';
+import { HomePage, DashboardPage, UserProfilePage, CoursePage } from './pages';
 import { ProtectedRoute } from './components';
 import { Route, Routes } from 'react-router-dom';
 
@@ -19,6 +19,14 @@ function App() {
         element={
           <ProtectedRoute>
             <UserProfilePage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/course/:id"
+        element={
+          <ProtectedRoute>
+            <CoursePage />
           </ProtectedRoute>
         }
       />
