@@ -13,7 +13,7 @@ export function Navbar() {
       <LoginModal opened={opened} closeLoginModal={closeLoginModal} />
       <nav className={styles.navbar}>
         <div className={styles.logo}>
-          <Link to="/">LMS</Link>
+          <Link to="/dashboard">LMS</Link>
         </div>
         <ul className={styles.navLinks}>
           {token && (
