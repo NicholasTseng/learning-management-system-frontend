@@ -40,7 +40,7 @@ export function CourseEntry({
     () => [
       <div className={styles.editButton}>
         <Button block type="primary" onClick={() => editCourse(course.id)}>
-          Edit
+          Manage
         </Button>
       </div>,
       <div className={styles.editButton}>

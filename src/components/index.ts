@@ -4,3 +4,5 @@ export * from './AddCourseModal';
 export * from './Confirm';
 export * from './PasswordModal';
 export * from './ProtectedRoute';
+export * from './VideoEntry';
+export * from './EditModal';
