@@ -80,31 +80,36 @@ export function CoursePage() {
   }
 
   return (
-    <div className={styles.container}>
+    <>
       <Navbar />
-      <div>
-        <Card
-          title={course.title || ''}
-          extra={
-            <Button type="primary" onClick={() => setIsEditModalVisible(true)}>
-              Edit
-            </Button>
-          }
-        >
-          <p>{course.description}</p>
-        </Card>
+      <div className={styles.container}>
+        <div>
+          <Card
+            title={course.title || ''}
+            extra={
+              <Button
+                type="primary"
+                onClick={() => setIsEditModalVisible(true)}
+              >
+                Edit
+              </Button>
+            }
+          >
+            <p>{course.description}</p>
+          </Card>
+        </div>
+        <div className={styles.videoEntryList}>
+          {videoList.map((video) => (
+            <VideoEntry
+              key={video.id}
+              video={video}
+              editVideo={onEditVideo}
+              removeVideo={onRemoveVideo}
+            />
+          ))}
+        </div>
+        <EditModal {...editModalProps} />
       </div>
-      <div className={styles.videoEntryList}>
-        {videoList.map((video) => (
-          <VideoEntry
-            key={video.id}
-            video={video}
-            editVideo={onEditVideo}
-            removeVideo={onRemoveVideo}
-          />
-        ))}
-      </div>
-      <EditModal {...editModalProps} />
-    </div>
+    </>
   );
 }
