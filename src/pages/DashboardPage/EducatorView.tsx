@@ -3,8 +3,10 @@ import { Navbar, CourseEntry, AddCourseModal } from '../../components';
 import styles from './DashboardPage.module.css';
 import { useCourseStore } from '../../store';
 import { Button } from 'antd';
+import { useNavigate } from 'react-router-dom';
 
 export function EducatorView() {
+  const navigate = useNavigate();
   const { courses, setCourses, removeCourse } = useCourseStore();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const onAddCourse = useCallback(
@@ -19,9 +21,12 @@ export function EducatorView() {
     },
     [courses, setCourses],
   );
-  const onEditCourse = useCallback((id: number) => {
-    window.location.href = `/course/${id}`;
-  }, []);
+  const onEditCourse = useCallback(
+    (id: number) => {
+      navigate(`/course/${id}`);
+    },
+    [navigate],
+  );
   const onRemoveCourse = useCallback(
     (id: number) => removeCourse(id),
     [removeCourse],
