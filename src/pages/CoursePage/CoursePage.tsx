@@ -2,10 +2,11 @@ import type { Info, Video } from '../../components';
 import { Navbar, VideoEntry, EditModal } from '../../components';
 import { Button, Card } from 'antd';
 import styles from './CoursePage.module.css';
-import { useCourseStore } from '../../store';
+import { useCourseStore, useUserStore } from '../../store';
 import { useMemo, useState, useCallback, useEffect } from 'react';
 
 export function CoursePage() {
+  const { user } = useUserStore();
   const { courses, updateCourse } = useCourseStore();
   const courseId = useMemo(
     () => Number(window.location.pathname.split('/').pop()),
@@ -87,12 +88,14 @@ export function CoursePage() {
           <Card
             title={course.title || ''}
             extra={
-              <Button
-                type="primary"
-                onClick={() => setIsEditModalVisible(true)}
-              >
-                Edit
-              </Button>
+              user.role === 'educator' && (
+                <Button
+                  type="primary"
+                  onClick={() => setIsEditModalVisible(true)}
+                >
+                  Edit
+                </Button>
+              )
             }
           >
             <p>{course.description}</p>
@@ -105,6 +108,7 @@ export function CoursePage() {
               video={video}
               editVideo={onEditVideo}
               removeVideo={onRemoveVideo}
+              showPlayButton={user.role === 'learner'}
             />
           ))}
         </div>

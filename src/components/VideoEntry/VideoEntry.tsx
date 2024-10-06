@@ -14,9 +14,15 @@ interface VideoEntryProps {
   video: Video;
   editVideo: (id: number, info: Partial<Video>) => void;
   removeVideo: (id: number) => void;
+  showPlayButton: boolean;
 }
 
-export function VideoEntry({ video, editVideo, removeVideo }: VideoEntryProps) {
+export function VideoEntry({
+  video,
+  editVideo,
+  removeVideo,
+  showPlayButton,
+}: VideoEntryProps) {
   const [isConfirmVisible, setIsConfirmVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
 
@@ -35,28 +41,43 @@ export function VideoEntry({ video, editVideo, removeVideo }: VideoEntryProps) {
   );
 
   const actions = useMemo(
-    () => [
-      <div className={styles.editButton}>
-        <Button
-          block
-          type="primary"
-          onClick={() => setIsEditModalVisible(true)}
-        >
-          Edit
-        </Button>
-      </div>,
-      <div className={styles.editButton}>
-        <Button
-          block
-          type="default"
-          onClick={() => setIsConfirmVisible(true)}
-          danger
-        >
-          Remove
-        </Button>
-      </div>,
-    ],
-    [setIsEditModalVisible, setIsConfirmVisible],
+    () =>
+      showPlayButton
+        ? [
+            <div className={styles.editButton}>
+              <Button
+                type="primary"
+                target="_blank"
+                rel="noopener noreferrer"
+                block
+                onClick={() => window.open(video.url)}
+              >
+                Watch Video
+              </Button>
+            </div>,
+          ]
+        : [
+            <div className={styles.editButton}>
+              <Button
+                block
+                type="primary"
+                onClick={() => setIsEditModalVisible(true)}
+              >
+                Edit
+              </Button>
+            </div>,
+            <div className={styles.editButton}>
+              <Button
+                block
+                type="default"
+                onClick={() => setIsConfirmVisible(true)}
+                danger
+              >
+                Remove
+              </Button>
+            </div>,
+          ],
+    [showPlayButton, video.url],
   );
 
   const editModalProps = useMemo(
