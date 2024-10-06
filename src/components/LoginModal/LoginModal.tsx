@@ -6,6 +6,7 @@ import LoginForm from './LoginForm';
 import SignUpForm from './SignUpForm';
 import { userLoginInfo, userSignUpInfo } from './LoginModal.type';
 import Cookies from 'js-cookie';
+import { useCourseStore, useUserStore } from '../../store';
 
 interface LoginModalProps {
   opened: boolean;
@@ -14,6 +15,8 @@ interface LoginModalProps {
 
 export function LoginModal({ opened, closeLoginModal }: LoginModalProps) {
   const navigate = useNavigate();
+  const { fetchCourses } = useCourseStore();
+  const { fetchUser } = useUserStore();
 
   const handleLogin = useCallback(
     async (info: userLoginInfo) => {
@@ -27,12 +30,14 @@ export function LoginModal({ opened, closeLoginModal }: LoginModalProps) {
 
         const { token } = loginResponse.data as unknown as { token: string };
         Cookies.set('user_token', token);
+        fetchCourses();
+        fetchUser();
         navigate('/dashboard');
       } catch (error) {
         console.error('Error logging in:', error as Error);
       }
     },
-    [navigate],
+    [navigate, fetchCourses, fetchUser],
   );
 
   const handleSignUp = useCallback(
@@ -49,12 +54,14 @@ export function LoginModal({ opened, closeLoginModal }: LoginModalProps) {
 
         const { token } = signUpResponse.data as unknown as { token: string };
         Cookies.set('user_token', token);
+        fetchCourses();
+        fetchUser();
         navigate('/dashboard');
       } catch (error) {
         console.error('Error logging in:', error as Error);
       }
     },
-    [navigate],
+    [navigate, fetchCourses, fetchUser],
   );
 
   return (

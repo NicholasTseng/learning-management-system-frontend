@@ -23,7 +23,13 @@ export default function LoginForm({
     >
       <Form.Item
         name="email"
-        rules={[{ required: true, message: 'Please input your email!' }]}
+        rules={[
+          {
+            required: true,
+            message: 'Please input your email!',
+            type: 'email',
+          },
+        ]}
       >
         <Input placeholder="Email" />
       </Form.Item>

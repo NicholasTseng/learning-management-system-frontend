@@ -14,8 +14,12 @@ interface CourseStore {
   removeCourse: (id: number) => void;
 }
 
-export const useCourseStore = create<CourseStore>((set) => ({
+const initialState = {
   courses: [],
+};
+
+export const useCourseStore = create<CourseStore>((set) => ({
+  ...initialState,
 
   setCourses: (newCourses) =>
     set((state) => ({ courses: [...state.courses, ...newCourses] })),
