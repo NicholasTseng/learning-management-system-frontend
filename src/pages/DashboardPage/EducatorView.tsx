@@ -4,6 +4,7 @@ import styles from './DashboardPage.module.css';
 import { useCourseStore } from '../../store';
 import { Button } from 'antd';
 import { useNavigate } from 'react-router-dom';
+import api from '../../services/api';
 
 export function EducatorView() {
   const navigate = useNavigate();
@@ -11,7 +12,10 @@ export function EducatorView() {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const onAddCourse = useCallback(
     (course: { title: string; description: string }) => {
-      // TODO: Hook up with the API
+      api.post('course/create-course', {
+        name: course.title,
+        description: course.description,
+      });
       setCourses([
         {
           id: courses.length + 1,
@@ -29,7 +33,10 @@ export function EducatorView() {
     [navigate],
   );
   const onRemoveCourse = useCallback(
-    (id: number) => removeCourse(id),
+    (id: number) => {
+      api.delete(`course/delete-course/${id}`);
+      removeCourse(id);
+    },
     [removeCourse],
   );
 
