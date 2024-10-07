@@ -15,6 +15,7 @@ export function EducatorView() {
       setCourses([
         {
           id: courses.length + 1,
+          learners: [],
           ...course,
         },
       ]);

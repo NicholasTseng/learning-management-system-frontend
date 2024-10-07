@@ -4,6 +4,7 @@ type Course = {
   id: number;
   title: string;
   description: string;
+  learners: number[];
 };
 
 interface CourseStore {
@@ -33,11 +34,19 @@ export const useCourseStore = create<CourseStore>((set) => ({
           id: 1,
           title: 'Course 1',
           description: 'This is the first course',
+          learners: [1, 2],
         },
         {
           id: 2,
           title: 'Course 2',
           description: 'This is the second course',
+          learners: [2, 3, 4],
+        },
+        {
+          id: 3,
+          title: 'Course 3',
+          description: 'This is the third course',
+          learners: [5],
         },
       ];
 

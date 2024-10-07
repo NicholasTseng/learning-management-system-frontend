@@ -3,6 +3,7 @@ import { create } from 'zustand';
 type Role = 'learner' | 'educator';
 
 export type User = {
+  id: number;
   username: string;
   email: string;
   role: Role;
@@ -17,6 +18,7 @@ interface UserStore {
 
 const initialState = {
   user: {
+    id: 0,
     username: '',
     email: '',
     role: 'learner' as Role,
@@ -35,9 +37,10 @@ export const useUserStore = create<UserStore>((set) => ({
       // TODO: Hook up with the API
       // const response = await fetch('/api/user');
       const user: User = {
+        id: 1,
         username: 'JohnDoe',
         email: 'john.doe@example.com',
-        role: 'educator',
+        role: 'learner',
       };
       set({ user });
     } catch (error) {
