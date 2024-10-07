@@ -1,12 +1,12 @@
 import { useCallback } from 'react';
 import { Modal, Tabs } from 'antd';
 import api from '../../services/api';
+import { loadApp } from '../../services/app-loader';
 import { useNavigate } from 'react-router-dom';
 import LoginForm from './LoginForm';
 import SignUpForm from './SignUpForm';
 import { userLoginInfo, userSignUpInfo } from './LoginModal.type';
 import Cookies from 'js-cookie';
-import { useCourseStore, useUserStore } from '../../store';
 
 interface LoginModalProps {
   opened: boolean;
@@ -15,8 +15,6 @@ interface LoginModalProps {
 
 export function LoginModal({ opened, closeLoginModal }: LoginModalProps) {
   const navigate = useNavigate();
-  const { fetchCourses } = useCourseStore();
-  const { fetchUser } = useUserStore();
 
   const handleLogin = useCallback(
     async (info: userLoginInfo) => {
@@ -30,14 +28,13 @@ export function LoginModal({ opened, closeLoginModal }: LoginModalProps) {
 
         const { token } = loginResponse.data as unknown as { token: string };
         Cookies.set('user_token', token);
-        fetchCourses();
-        fetchUser();
+        loadApp();
         navigate('/dashboard');
       } catch (error) {
         console.error('Error logging in:', error as Error);
       }
     },
-    [navigate, fetchCourses, fetchUser],
+    [navigate],
   );
 
   const handleSignUp = useCallback(
@@ -54,14 +51,13 @@ export function LoginModal({ opened, closeLoginModal }: LoginModalProps) {
 
         const { token } = signUpResponse.data as unknown as { token: string };
         Cookies.set('user_token', token);
-        fetchCourses();
-        fetchUser();
+        loadApp();
         navigate('/dashboard');
       } catch (error) {
         console.error('Error logging in:', error as Error);
       }
     },
-    [navigate, fetchCourses, fetchUser],
+    [navigate],
   );
 
   return (

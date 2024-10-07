@@ -4,7 +4,7 @@ import App from './App';
 import { BrowserRouter } from 'react-router-dom';
 import './styles/global.css';
 import { ConfigProvider } from 'antd';
-import { useCourseStore, useUserStore } from './store';
+import { loadApp } from './services/app-loader';
 
 const container = document.getElementById('root');
 
@@ -13,10 +13,7 @@ if (!container) {
 }
 
 const root = createRoot(container);
-const { fetchCourses } = useCourseStore.getState();
-const { fetchUser } = useUserStore.getState();
-fetchCourses();
-fetchUser();
+loadApp();
 
 root.render(
   <React.StrictMode>

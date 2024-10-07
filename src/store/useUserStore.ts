@@ -1,5 +1,4 @@
 import { create } from 'zustand';
-import api from '../services/api';
 
 type Role = 'learner' | 'educator';
 
@@ -14,7 +13,6 @@ interface UserStore {
   user: User;
   setUser: (user: User) => void;
   updateUser: (updates: Partial<User>) => void;
-  fetchUser: () => Promise<void>;
 }
 
 const initialState = {
@@ -33,14 +31,4 @@ export const useUserStore = create<UserStore>((set) => ({
     set((state) => ({
       user: { ...state.user, ...updates },
     })),
-  fetchUser: async () => {
-    try {
-      const response = await api.get('/user/me');
-      const user = response.data[0] as User;
-
-      set({ user });
-    } catch (error) {
-      console.error('Failed to fetch user:', error);
-    }
-  },
 }));
