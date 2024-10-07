@@ -1,7 +1,8 @@
-import { useCallback, useState, useMemo } from 'react';
+import { useCallback, useState, useMemo, useEffect } from 'react';
 import { Form, Input, Button, Card, Row, Col } from 'antd';
 import { Navbar, Confirm, PasswordModal } from '../../components';
 import { useUserStore, User } from '../../store';
+import api from '../../services/api';
 
 export function UserProfilePage() {
   const [form] = Form.useForm();
@@ -23,8 +24,10 @@ export function UserProfilePage() {
     [form, isConfirmVisible],
   );
   const onSaveChangePassword = useCallback((password: string) => {
-    // TODO: Hook up with the backend to save the new password
-    console.log('New password is:', password || 'empty');
+    const encodedPassword = btoa(password);
+    api.put('/user/update-password', {
+      password: encodedPassword,
+    });
     setIsPasswordModalVisible(false);
   }, []);
   const passwordModalProps = useMemo(
@@ -37,10 +40,20 @@ export function UserProfilePage() {
   );
   const onFinish = useCallback(
     (values: User) => {
+      api.put('/user/update-username', {
+        username: values.username,
+      });
       setUser(values);
       setIsSaveDisabled(true);
     },
     [setUser, setIsSaveDisabled],
+  );
+
+  useEffect(
+    function setUserFormValues() {
+      form.setFieldsValue(user);
+    },
+    [form, user],
   );
 
   return (
@@ -55,7 +68,6 @@ export function UserProfilePage() {
           name="userProfile"
           layout="vertical"
           onFinish={onFinish}
-          initialValues={user}
           onFieldsChange={() => setIsSaveDisabled(false)}
         >
           <Form.Item name="username" label="Username">
