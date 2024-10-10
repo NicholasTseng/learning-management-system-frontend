@@ -4,6 +4,8 @@ import { Button, Card } from 'antd';
 import styles from './CoursePage.module.css';
 import { useCourseStore, useUserStore } from '../../store';
 import { useMemo, useState, useCallback, useEffect } from 'react';
+import { Upload } from '../../components';
+import api from '../../services/api';
 
 export function CoursePage() {
   const { user } = useUserStore();
@@ -13,6 +15,7 @@ export function CoursePage() {
     [],
   );
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [isUploadModalVisible, setIsUploadModalVisible] = useState(false);
   const [videoList, setVideoList] = useState<Video[]>([]);
 
   const course = useMemo(
@@ -22,7 +25,13 @@ export function CoursePage() {
 
   const onEditCourse = useCallback(
     (values: Info) => {
-      updateCourse({ id: courseId, ...course, ...values });
+      if (!course) return;
+
+      api.put(`/course/update-course/${courseId}`, {
+        name: values.title,
+        description: values.description,
+      });
+      updateCourse({ ...course, id: courseId, ...values });
       setIsEditModalVisible(false);
     },
     [course, updateCourse, courseId],
@@ -42,43 +51,55 @@ export function CoursePage() {
     [course?.title, course?.description, isEditModalVisible, onEditCourse],
   );
 
-  const onEditVideo = useCallback((id: number, info: Partial<Video>) => {
-    setVideoList((videos) =>
-      videos.map((v) => (v.id === id ? { ...v, ...info } : v)),
-    );
-  }, []);
+  const onEditVideo = useCallback(
+    (id: number, info: Partial<Video>) => {
+      if (!course) return;
 
-  const onRemoveVideo = useCallback((id: number) => {
-    setVideoList((videos) => videos.filter((v) => v.id !== id));
-  }, []);
+      api.put(`/video/update-video/${course.id}/${id}`, {
+        title: info.title,
+        description: info.description,
+      });
 
-  useEffect(function fetchVideoList() {
-    // TODO: Fetch video list from the backend
-    setVideoList([
+      setVideoList((videos) =>
+        videos.map((v) => (v.id === id ? { ...v, ...info } : v)),
+      );
+    },
+    [course],
+  );
+
+  const onRemoveVideo = useCallback(
+    (id: number) => {
+      if (!course) return;
+      api.delete(`/video/delete-video/${course.id}/${id}`);
+
+      setVideoList((videos) => videos.filter((v) => v.id !== id));
+    },
+    [course],
+  );
+
+  const onUploadVideo = useCallback((url: string) => {
+    setVideoList((videos) => [
+      ...videos,
       {
-        id: 1,
-        title: 'Introduction to React',
-        description: 'Learn the basics of React',
-        url: 'https://www.youtube.com/embed/Ke90Tje7VS0',
-      },
-      {
-        id: 2,
-        title: 'Introduction to Angular',
-        description: 'Learn the basics of Angular',
-        url: 'https://storage.googleapis.com/lbs-bucket/uploads/7a4dc7d79938557e787befefd47e2d459f634a290767cc5c8fcb25cc19689f7b.mp4.mp4',
-      },
-      {
-        id: 3,
-        title: 'Introduction to Vue',
-        description: 'Learn the basics of Vue',
-        url: 'https://www.youtube.com/embed/4deVCNJq3qc',
+        id: videos.length + 1,
+        title: 'Video Title',
+        description: '',
+        url,
       },
     ]);
+    setIsUploadModalVisible(false);
   }, []);
 
-  if (!course) {
-    return null;
-  }
+  useEffect(
+    function fetchVideoList() {
+      api.get(`/video/get-videos/${courseId}`).then((response) => {
+        setVideoList(response.data);
+      });
+    },
+    [courseId],
+  );
+
+  if (!course) return null;
 
   return (
     <>
@@ -111,8 +132,29 @@ export function CoursePage() {
               showPlayButton={user.role === 'learner'}
             />
           ))}
+          {user.role === 'educator' && (
+            <Button
+              type="dashed"
+              block
+              style={{
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '16px',
+              }}
+              onClick={() => setIsUploadModalVisible(true)}
+            >
+              +
+            </Button>
+          )}
         </div>
         <EditModal {...editModalProps} />
+        <Upload
+          courseId={course.id}
+          opened={isUploadModalVisible}
+          onUploadComplete={onUploadVideo}
+        />
       </div>
     </>
   );
