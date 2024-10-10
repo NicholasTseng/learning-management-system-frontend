@@ -3,6 +3,7 @@ import { useCourseStore, useUserStore } from '../../store';
 import styles from './DashboardPage.module.css';
 import { useMemo, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
+import api from '../../services/api';
 
 export function LearnerView() {
   const navigate = useNavigate();
@@ -19,6 +20,7 @@ export function LearnerView() {
   const onSubscribeCourse = useCallback(
     (id: number) => {
       const course = courses.find((course) => course.id === id);
+      api.put(`course/subscribe-course/${id}`);
 
       if (!course) return;
 
@@ -32,6 +34,7 @@ export function LearnerView() {
   const onUnsubscribeCourse = useCallback(
     (id: number) => {
       const course = courses.find((course) => course.id === id);
+      api.put(`course/unsubscribe-course/${id}`);
 
       if (!course) return;
 

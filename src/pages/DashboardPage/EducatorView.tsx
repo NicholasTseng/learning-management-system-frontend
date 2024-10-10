@@ -61,7 +61,7 @@ export function EducatorView() {
           type="dashed"
           block
           style={{
-            height: '100%', // Make the button take up the card's height
+            height: '100%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',

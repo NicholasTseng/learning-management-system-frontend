@@ -11,9 +11,14 @@ type CourseResponse = {
 
 async function fetchCourses() {
   const { setCourses } = useCourseStore.getState();
+  const { user } = useUserStore.getState();
 
   try {
-    const response = await api.get('/course/get-courses');
+    const isEducator = user.role === 'educator';
+    const route = isEducator
+      ? '/course/get-courses/me'
+      : '/course/get-courses/all';
+    const response = await api.get(route);
 
     const courses = (response.data as CourseResponse[]).map(
       (course: CourseResponse) =>
@@ -44,11 +49,11 @@ async function fetchUser() {
   }
 }
 
-export function loadApp() {
+export async function loadApp() {
   const userToken = Cookies.get('user_token');
 
   if (!userToken) return;
 
-  fetchCourses();
-  fetchUser();
+  await fetchUser();
+  await fetchCourses();
 }
